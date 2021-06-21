@@ -64,7 +64,6 @@
     height: 50vh;
     border-radius: 25vh;
     background-color: #fdffff;
-    padding: 4px;
   }
 
   .barForeground {
