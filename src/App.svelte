@@ -91,6 +91,7 @@
   .totals {
     font-size: 8vw;
     color: #fdffff;
+    margin: 4px;
   }
 </style>
 
