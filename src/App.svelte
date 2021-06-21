@@ -76,7 +76,7 @@
   }
 
   .percentage {
-    font-size: 40vh;
+    font-size: 20vh;
     color: #fdffff;
   }
 
@@ -85,7 +85,7 @@
     width: 100vw;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
   }
 
   .totals {
