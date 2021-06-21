@@ -75,8 +75,8 @@
     align-items: center;
   }
 
-  span {
-    font-size: min(40vh, 8vw);
+  .percentage {
+    font-size: 40vh;
     color: #fdffff;
   }
 
@@ -86,6 +86,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+
+  .totals {
+    font-size: 8vw;
+    color: #fdffff;
   }
 </style>
 
@@ -100,7 +105,7 @@
 </div>
 
 <div class="textBackground">
-  <span>
+  <span class="totals">
     {symbol}{$current.toFixed(decimals)} / {symbol}{$target.toFixed(decimals)} 
   </span>
 </div>
