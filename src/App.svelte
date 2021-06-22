@@ -3,6 +3,7 @@
   import { tweened } from "svelte/motion";
   import { derived } from "svelte/store";
 
+  let cacheBypassIncrement = 0;
   const parser = new DOMParser();
 
   function getValue(doc: Document, selector: string): number | null {
@@ -23,10 +24,10 @@
   }));
 
   function updateVariables() {
-    fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`, {
+    cacheBypassIncrement++;
+    fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}?${cacheBypassIncrement}=1`, {
       cache: "no-store"
-    }).then(res => res.json())
-      .then(body => body.contents)
+    }).then(res => res.text())
       .then(html => parser.parseFromString(html, 'text/html'))
       .then(doc => ({
         currentVal: getValue(doc, currentSelector),
