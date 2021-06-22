@@ -5,31 +5,15 @@
 
   const parser = new DOMParser();
 
-  let html: string | null = null;
+  function getValue(doc: Document, selector: string): number | null {
+    const element = doc.querySelector(selector);
+    if(element === null) return null;
 
-  let doc: Document | null;
-  $: doc = html === null ? null : parser.parseFromString(html, 'text/html');
+    const text = element.textContent;
+    if(text === null) return null;
 
-
-  let currentNode: Element | null;
-  $: currentNode = doc === null ? null : doc.querySelector(currentSelector);
-
-  let currentAmountString: string | null;
-  $: currentAmountString = currentNode === null ? null : currentNode.textContent;
-
-  let currentAmountNumber: number | null;
-  $: currentAmountNumber = currentAmountString === null ? null : parseFloat(currentAmountString);
-
-
-  let targetNode: Element | null;
-  $: targetNode = doc === null ? null : doc.querySelector(targetSelector);
-
-  let targetAmountString: string | null;
-  $: targetAmountString = targetNode === null ? null : targetNode.textContent;
-
-  let targetAmountNumber: number | null;
-  $: targetAmountNumber = targetAmountString === null ? null : parseFloat(targetAmountString);
-
+    return parseFloat(text);
+  }
 
   const current = tweened(0, { duration: 1000 });
   const target = tweened(0, { duration: 500 });
@@ -38,18 +22,22 @@
     else return 100 * currentVal / targetVal;
   }));
 
-  $: if(currentAmountNumber !== null) current.set(currentAmountNumber, {});
-  $: if(targetAmountNumber !== null) target.set(targetAmountNumber, {});
-
-
   function updateVariables() {
     fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`)
       .then(res => res.json())
       .then(body => body.contents)
-      .then(text => html = text);
+      .then(html => parser.parseFromString(html, 'text/html'))
+      .then(doc => ({
+        currentVal: getValue(doc, currentSelector),
+        targetVal: getValue(doc, targetSelector)
+      }))
+      .then(({currentVal, targetVal}) => {
+        if(currentVal !== null) current.set(currentVal, {});
+        if(targetVal !== null) target.set(targetVal, {});
+      });
   }
 
-  setTimeout(updateVariables, 10 * 1000);
+  setInterval(updateVariables, 10 * 1000);
   updateVariables();
 </script>
 
