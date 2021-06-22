@@ -23,8 +23,9 @@
   }));
 
   function updateVariables() {
-    fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`)
-      .then(res => res.json())
+    fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`, {
+      cache: "no-store"
+    }).then(res => res.json())
       .then(body => body.contents)
       .then(html => parser.parseFromString(html, 'text/html'))
       .then(doc => ({
